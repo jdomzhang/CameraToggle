@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build, sign & publish
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal app (arm64 + x86_64)
+        run: ./build.sh
+
+      - name: Sign & notarize
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: bash .github/scripts/sign-and-notarize.sh
+
+      - name: Package & checksum
+        run: |
+          ZIP="CameraToggle-${GITHUB_REF_NAME}-macOS-universal.zip"
+          ditto -c -k --keepParent CameraToggle.app "$ZIP"
+          shasum -a 256 "$ZIP" > checksums.txt
+          echo "ZIP=$ZIP" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$ZIP" --generate-notes \
+            --title "CameraToggle ${GITHUB_REF_NAME}"
+          gh release view "$GITHUB_REF_NAME" --json body -q .body > body.md
+          cat checksums.txt >> body.md
+          printf '\n---\n\nUniversal binary (Apple Silicon + Intel), macOS 13+. 双架构通用二进制。\n' >> body.md
+          gh release edit "$GITHUB_REF_NAME" --notes-file body.md

@@ -31,7 +31,7 @@ cat > "$APP/Contents/Info.plist" <<'EOF'
     <key>CFBundleDisplayName</key>
     <string>CameraToggle</string>
     <key>CFBundleIdentifier</key>
-    <string>local.cameratoggle.app</string>
+    <string>com.edesoft.cameratoggle</string>
     <key>CFBundleExecutable</key>
     <string>CameraToggle</string>
     <key>CFBundleIconFile</key>

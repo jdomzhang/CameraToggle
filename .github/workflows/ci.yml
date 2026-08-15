@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: Build check
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal app
+        run: ./build.sh
+
+      - name: Verify binary
+        run: |
+          file CameraToggle.app/Contents/MacOS/CameraToggle
+          codesign --verify --deep --strict --verbose=1 CameraToggle.app
+          plutil -lint CameraToggle.app/Contents/Info.plist
