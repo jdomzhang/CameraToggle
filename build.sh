@@ -16,8 +16,6 @@ lipo -create -output "$APP/Contents/MacOS/CameraToggle" \
     "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
 rm "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
 
-# lipo 合并会使链接器的 ad-hoc 签名失效，这里补签（CI 中会被 Developer ID 签名覆盖）
-codesign --force --sign - "$APP"
 
 if [ -f AppIcon.icns ]; then
     mkdir -p "$APP/Contents/Resources"
@@ -52,6 +50,10 @@ cat > "$APP/Contents/Info.plist" <<'EOF'
 </dict>
 </plist>
 EOF
+
+# lipo 合并会使链接器的 ad-hoc 签名失效；补 ad-hoc 签名必须放在所有资源写入之后
+# （CI 中会被 Developer ID 签名覆盖）
+codesign --force --sign - "$APP"
 
 # 让 Finder 立即刷新图标缓存
 touch "$APP"
