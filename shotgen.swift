@@ -402,6 +402,15 @@ func composite(_ imagePath: String, in rect: NSRect, shadow: Bool = true) {
     NSShadow().set()
 }
 
+/// 等比缩放合成：在 rect 内取最大等比尺寸并居中，避免拉伸变形。
+func compositeFit(_ imagePath: String, in rect: NSRect, shadow: Bool = true) {
+    guard let image = NSImage(contentsOfFile: imagePath) else { fatalError("missing \(imagePath)") }
+    let scale = min(rect.width / image.size.width, rect.height / image.size.height)
+    let w = image.size.width * scale
+    let h = image.size.height * scale
+    composite(imagePath, in: NSRect(x: rect.midX - w / 2, y: rect.midY - h / 2, width: w, height: h), shadow: shadow)
+}
+
 // MARK: - Hero 幻灯片（广告式大标题 + UI 卡片）
 
 func heroSlide(lang: String, cardPath: String, out: String) {
@@ -430,10 +439,8 @@ func heroSlide(lang: String, cardPath: String, out: String) {
                          cx: W / 2, cy: H - 310)
         }
 
-        // UI 卡片（约 640 宽）
-        let cardW: CGFloat = 660
-        let cardH: CGFloat = 700
-        composite(cardPath, in: NSRect(x: (W - cardW) / 2, y: 40, width: cardW, height: cardH))
+        // UI 卡片：等比缩放（卡片原生约 1.78:1 横宽），禁止拉伸
+        compositeFit(cardPath, in: NSRect(x: (W - 700) / 2, y: 55, width: 700, height: 430))
     }
     save(rep, out)
 }
@@ -478,9 +485,9 @@ func guideSlide(lang: String, guidePath: String, menuPath: String, out: String) 
                          color: NSColor.white.withAlphaComponent(0.75), cx: W / 2, cy: H - 310)
         }
 
-        // 菜单卡片在背后偏右，引导窗口在前偏左，形成层次
-        composite(menuPath, in: NSRect(x: W * 0.52, y: 60, width: 430, height: 460))
-        composite(guidePath, in: NSRect(x: W * 0.30 - 30, y: 40, width: 560, height: 506))
+        // 菜单卡片在背后偏右（等比），引导窗口在前偏左，形成层次
+        compositeFit(menuPath, in: NSRect(x: W * 0.50, y: 90, width: 520, height: 460))
+        compositeFit(guidePath, in: NSRect(x: W * 0.30 - 30, y: 40, width: 560, height: 506))
     }
     save(rep, out)
 }
@@ -542,8 +549,8 @@ func banner(lang: String, menuPath: String, out: String) {
                      color: NSColor.white.withAlphaComponent(0.6), x: tx + 4, cy: H / 2 - 130)
         }
 
-        // 右下角小菜单条呼应
-        composite(menuPath, in: NSRect(x: W - 560, y: 40, width: 470, height: 500))
+        // 右下角小菜单条呼应（等比）
+        compositeFit(menuPath, in: NSRect(x: W - 640, y: 90, width: 560, height: 460))
     }
     save(rep, out)
 }
