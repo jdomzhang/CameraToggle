@@ -28,3 +28,6 @@ Package.resolved
 # 发布产物（走 GitHub Releases，不入库）
 CameraToggle-v*-macOS-*.zip
 *.dmg
+
+# DMG 模板中的布局文件需要入库
+!.github/dmg-template/.DS_Store
