@@ -16,6 +16,9 @@ lipo -create -output "$APP/Contents/MacOS/CameraToggle" \
     "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
 rm "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
 
+# lipo 合并会使链接器的 ad-hoc 签名失效，这里补签（CI 中会被 Developer ID 签名覆盖）
+codesign --force --sign - "$APP"
+
 if [ -f AppIcon.icns ]; then
     mkdir -p "$APP/Contents/Resources"
     cp AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
