@@ -33,13 +33,12 @@ jobs:
           shasum -a 256 "$ZIP" > checksums.txt
           echo "ZIP=$ZIP" >> "$GITHUB_ENV"
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (bilingual notes)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" "$ZIP" --generate-notes \
             --title "CameraToggle ${GITHUB_REF_NAME}"
-          gh release view "$GITHUB_REF_NAME" --json body -q .body > body.md
-          cat checksums.txt >> body.md
-          printf '\n---\n\nUniversal binary (Apple Silicon + Intel), macOS 13+. 双架构通用二进制。\n' >> body.md
+          gh release view "$GITHUB_REF_NAME" --json body -q .body > changelog.md
+          cat .github/release-template.md changelog.md checksums.txt > body.md
           gh release edit "$GITHUB_REF_NAME" --notes-file body.md
