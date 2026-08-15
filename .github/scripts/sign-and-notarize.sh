@@ -1,13 +1,18 @@
 #!/bin/bash
 # Developer ID 签名 + Apple 公证。缺少 secrets 时自动跳过（产出未签名构建）。
+# 用法：
+#   sign-and-notarize.sh app              # 签名并公证 CameraToggle.app
+#   sign-and-notarize.sh dmg <文件.dmg>   # 签名并公证 DMG 安装包
 # 需要的仓库 secrets：
 #   MACOS_CERT_P12         Developer ID Application 证书 .p12（base64）
 #   MACOS_CERT_PASSWORD    .p12 导出密码（可为空）
-#   ASC_KEY_P8             App Store Connect API 密钥 .p8（base64，App Manager 角色）
+#   ASC_KEY_P8             App Store Connect API 密钥 .p8（base64）
 #   ASC_KEY_ID             密钥 ID
 #   ASC_ISSUER_ID          发行者 ID
 set -euo pipefail
 
+MODE="${1:-app}"
+DMG_FILE="${2:-}"
 APP="CameraToggle.app"
 
 if [ -z "${MACOS_CERT_P12:-}" ]; then
@@ -41,19 +46,35 @@ if [ -z "$IDENTITY" ]; then
 fi
 echo "Signing with: $IDENTITY"
 
-# --- 2. 签名（Hardened Runtime + 安全时间戳，公证必需） ---
-codesign --force --deep --options runtime --timestamp --sign "$IDENTITY" "$APP"
-codesign --verify --deep --strict --verbose=2 "$APP"
-
-# --- 3. 公证 + 装订（需 App Store Connect 密钥） ---
-if [ -n "${ASC_KEY_P8:-}" ]; then
+notarize() {  # $1 = 要公证的文件
+  if [ -z "${ASC_KEY_P8:-}" ]; then
+    echo "::warning::缺少 App Store Connect 密钥，已签名但未公证"
+    return 0
+  fi
   printf '%s' "$ASC_KEY_P8" | base64 --decode > asc.p8
-  ditto -c -k --keepParent "$APP" notary.zip
-  xcrun notarytool submit notary.zip \
+  xcrun notarytool submit "$1" \
       --key asc.p8 --key-id "$ASC_KEY_ID" --issuer "$ASC_ISSUER_ID" --wait
-  xcrun stapler staple "$APP"
-  xcrun stapler validate "$APP"
-  echo "✅ 已签名并公证"
-else
-  echo "::warning::缺少 App Store Connect 密钥，已签名但未公证"
-fi
+  xcrun stapler staple "$1"
+  xcrun stapler validate "$1"
+  rm -f asc.p8
+}
+
+case "$MODE" in
+  app)
+    codesign --force --deep --options runtime --timestamp --sign "$IDENTITY" "$APP"
+    codesign --verify --deep --strict --verbose=2 "$APP"
+    ditto -c -k --keepParent "$APP" notary.zip
+    notarize notary.zip
+    echo "✅ App 已签名并公证"
+    ;;
+  dmg)
+    if [ -z "$DMG_FILE" ] || [ ! -f "$DMG_FILE" ]; then
+      echo "::error::dmg 模式需要提供存在的 .dmg 文件"
+      exit 1
+    fi
+    codesign --force --timestamp --sign "$IDENTITY" "$DMG_FILE"
+    codesign --verify --verbose=2 "$DMG_FILE"
+    notarize "$DMG_FILE"
+    echo "✅ DMG 已签名并公证"
+    ;;
+esac

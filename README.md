@@ -38,7 +38,7 @@ CameraToggle installs/removes a signed-off configuration profile containing a `c
 
 ## Download & install
 
-Grab `CameraToggle-vX.Y.Z-macOS-universal.zip` from [Releases](https://github.com/jdomzhang/CameraToggle/releases), unzip, and drag **CameraToggle.app** to `/Applications`. Universal binary — Apple Silicon and Intel, macOS 13+. Official releases are **Developer ID signed & notarized** when CI has signing keys configured (forks/self-builds are unsigned).
+Grab the **`.dmg` installer** (or `.zip`) from [Releases](https://github.com/jdomzhang/CameraToggle/releases), open it, and drag **CameraToggle** to `/Applications`. Universal binary — Apple Silicon and Intel, macOS 13+. Official releases are **Developer ID signed & notarized** (forks/self-builds are unsigned).
 
 Building it yourself (~10 seconds, fully verifiable): see below. Self-built binaries are unsigned, so Gatekeeper may complain on first launch — right-click the app → **Open** → Open.
 

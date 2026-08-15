@@ -11,9 +11,9 @@
 
 ## 📦 Download / 下载
 
-Grab **`CameraToggle-vX.Y.Z-macOS-universal.zip`** from the assets below. Universal binary — Apple Silicon & Intel, macOS 13 or later.
+Download **`CameraToggle-vX.Y.Z-macOS-universal.dmg`** (installer, recommended) — open it and drag the app to Applications. Or grab the `.zip` if you prefer. Universal binary — Apple Silicon & Intel, macOS 13 or later.
 
-下载下方附件 **`CameraToggle-vX.Y.Z-macOS-universal.zip`**，解压后将 **CameraToggle.app** 拖入 `/Applications` 即可。双架构通用二进制，Apple Silicon 与 Intel 均可运行，macOS 13 及以上。
+推荐下载 **`CameraToggle-vX.Y.Z-macOS-universal.dmg`** 安装包——打开后将 **CameraToggle** 拖入 Applications 文件夹即可；也可选择 `.zip` 压缩包。双架构通用二进制，Apple Silicon 与 Intel 均可运行，macOS 13 及以上。
 
 ✅ **Developer ID signed & notarized** — just double-click to open, no Gatekeeper warnings.
 ✅ **已签名 + 公证** —— 双击即可打开，无任何安全拦截。

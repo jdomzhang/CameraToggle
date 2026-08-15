@@ -27,3 +27,4 @@ Package.resolved
 
 # 发布产物（走 GitHub Releases，不入库）
 CameraToggle-v*-macOS-*.zip
+*.dmg

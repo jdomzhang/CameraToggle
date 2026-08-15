@@ -38,7 +38,7 @@
 
 ## 下载与安装
 
-在 [Releases](https://github.com/jdomzhang/CameraToggle/releases) 下载 `CameraToggle-vX.Y.Z-macOS-universal.zip`，解压后把 **CameraToggle.app** 拖入 `/Applications` 即可。通用二进制，Apple Silicon 和 Intel 芯片均可运行，macOS 13 及以上。官方 Release 在 CI 配置签名密钥后为 **Developer ID 签名 + 公证**版本（fork 或自行构建则为未签名版）。
+在 [Releases](https://github.com/jdomzhang/CameraToggle/releases) 下载 **`.dmg` 安装包**（或 `.zip`），打开后把 **CameraToggle** 拖入 `Applications` 文件夹即可。通用二进制，Apple Silicon 和 Intel 芯片均可运行，macOS 13 及以上。官方 Release 为 **Developer ID 签名 + 公证**版本（fork 或自行构建则为未签名版）。
 
 也可自行编译（约 10 秒，完全可验证），见下。自行构建的二进制未签名，首次打开如被 Gatekeeper 拦截：右键 App → **打开** → 打开。
 
