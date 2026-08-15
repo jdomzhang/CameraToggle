@@ -46,7 +46,7 @@ if [ -z "$IDENTITY" ]; then
 fi
 echo "Signing with: $IDENTITY"
 
-notarize() {  # $1 = 要公证的文件
+notarize() {  # $1 = 提交公证的文件, $2 = 装订目标（.app / .dmg，不能是 zip）
   if [ -z "${ASC_KEY_P8:-}" ]; then
     echo "::warning::缺少 App Store Connect 密钥，已签名但未公证"
     return 0
@@ -54,8 +54,8 @@ notarize() {  # $1 = 要公证的文件
   printf '%s' "$ASC_KEY_P8" | base64 --decode > asc.p8
   xcrun notarytool submit "$1" \
       --key asc.p8 --key-id "$ASC_KEY_ID" --issuer "$ASC_ISSUER_ID" --wait
-  xcrun stapler staple "$1"
-  xcrun stapler validate "$1"
+  xcrun stapler staple "$2"
+  xcrun stapler validate "$2"
   rm -f asc.p8
 }
 
@@ -64,7 +64,7 @@ case "$MODE" in
     codesign --force --deep --options runtime --timestamp --sign "$IDENTITY" "$APP"
     codesign --verify --deep --strict --verbose=2 "$APP"
     ditto -c -k --keepParent "$APP" notary.zip
-    notarize notary.zip
+    notarize notary.zip "$APP"
     echo "✅ App 已签名并公证"
     ;;
   dmg)
@@ -74,7 +74,7 @@ case "$MODE" in
     fi
     codesign --force --timestamp --sign "$IDENTITY" "$DMG_FILE"
     codesign --verify --verbose=2 "$DMG_FILE"
-    notarize "$DMG_FILE"
+    notarize "$DMG_FILE" "$DMG_FILE"
     echo "✅ DMG 已签名并公证"
     ;;
 esac
