@@ -36,9 +36,15 @@
 - **启用**：移除描述文件——用户手动安装的描述文件本人即可删除，无需密码
 - 只操作自己的描述文件标识符（`local.cameratoggle.off`），绝不用 `-all`，不影响公司 MDM 等其他描述文件
 
+## 下载与安装
+
+在 [Releases](https://github.com/jdomzhang/CameraToggle/releases) 下载 `CameraToggle-vX.Y.Z-macOS-universal.zip`，解压后把 **CameraToggle.app** 拖入 `/Applications` 即可。通用二进制，Apple Silicon 和 Intel 芯片均可运行，macOS 13 及以上。
+
+App 免费且**未签名**，首次打开可能被 Gatekeeper 拦截：右键 App → **打开** → 打开（或执行 `xattr -dr com.apple.quarantine /Applications/CameraToggle.app`）。想用自己验证过的版本？10 秒即可自行编译，见下。
+
 ## 构建与运行
 
-需要 Xcode 命令行工具（`xcode-select --install`），Apple Silicon + macOS 13 及以上。
+需要 Xcode 命令行工具（`xcode-select --install`），macOS 13 及以上。
 
 ```bash
 git clone https://github.com/jdomzhang/CameraToggle.git

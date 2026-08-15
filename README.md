@@ -36,9 +36,15 @@ CameraToggle installs/removes a signed-off configuration profile containing a `c
 - **Enable**: removes the profile — user-installed profiles can be removed by the current user directly, no password needed.
 - It only ever touches its own profile identifier (`local.cameratoggle.off`), never `-all`, so MDM/work profiles are safe.
 
+## Download & install
+
+Grab `CameraToggle-vX.Y.Z-macOS-universal.zip` from [Releases](https://github.com/jdomzhang/CameraToggle/releases), unzip, and drag **CameraToggle.app** to `/Applications`. Universal binary — Apple Silicon and Intel, macOS 13+.
+
+The app is free and **unsigned**, so Gatekeeper may complain on first launch: right-click the app → **Open** → Open (or run `xattr -dr com.apple.quarantine /Applications/CameraToggle.app`). Prefer verified builds? Build it yourself in ~10 seconds — see below.
+
 ## Build & run
 
-Requires Xcode Command Line Tools (`xcode-select --install`) and an Apple Silicon Mac on macOS 13+.
+Requires Xcode Command Line Tools (`xcode-select --install`), macOS 13+.
 
 ```bash
 git clone https://github.com/jdomzhang/CameraToggle.git

@@ -7,8 +7,14 @@ APP="CameraToggle.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
 
+# 通用二进制（Apple Silicon + Intel），macOS 13+
 swiftc -O -swift-version 5 -target arm64-apple-macos13.0 \
-    main.swift Guide.swift L10n.swift -o "$APP/Contents/MacOS/CameraToggle"
+    main.swift Guide.swift L10n.swift -o "$APP/Contents/MacOS/CameraToggle.arm64"
+swiftc -O -swift-version 5 -target x86_64-apple-macos13.0 \
+    main.swift Guide.swift L10n.swift -o "$APP/Contents/MacOS/CameraToggle.x86_64"
+lipo -create -output "$APP/Contents/MacOS/CameraToggle" \
+    "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
+rm "$APP/Contents/MacOS/CameraToggle.arm64" "$APP/Contents/MacOS/CameraToggle.x86_64"
 
 if [ -f AppIcon.icns ]; then
     mkdir -p "$APP/Contents/Resources"
