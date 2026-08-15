@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# 构建产物（./build.sh 生成）
+CameraToggle.app/
+build/
+DerivedData/
+
+# 图标生成中间产物
+AppIcon.iconset/
+
+# Xcode / Swift Package Manager
+xcuserdata/
+*.xcodeproj
+*.xcworkspace
+.build/
+Package.resolved
+
+# 编辑器与临时文件
+*.log
+*.swp
+.vscode/
+.idea/
