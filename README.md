@@ -82,6 +82,10 @@ Yes — the restriction is enforced by the OS at the driver-access level. Apps t
 **How do I uninstall?**
 Enable the camera first (or delete the profile in System Settings), then delete the app and `~/.camera-toggle/`.
 
+## License
+
+Released under the [MIT License](LICENSE). © 2026 Edesoft Intelligence Technology Co., Ltd.
+
 ## Credits
 
 Marketing images generated with [ParthJadhav/app-store-screenshots](https://github.com/ParthJadhav/app-store-screenshots) design principles (rendered with CoreGraphics, see `shotgen.swift`).

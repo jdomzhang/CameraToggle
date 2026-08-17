@@ -82,6 +82,10 @@ App Store 强制沙箱，而沙箱禁止本 App 的一切核心操作（安装�
 **如何卸载？**
 先启用摄像头（或在系统设置中删除描述文件），再删除 App 和 `~/.camera-toggle/` 目录。
 
+## 许可证
+
+基于 [MIT License](LICENSE) 发布。© 2026 Edesoft Intelligence Technology Co., Ltd.
+
 ## 致谢
 
 营销图基于 [ParthJadhav/app-store-screenshots](https://github.com/ParthJadhav/app-store-screenshots) 的设计规范生成（CoreGraphics 渲染，见 `shotgen.swift`）。
